@@ -1,0 +1,32 @@
+body {
+  background-color: rgb(128, 163, 197);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+#app {
+  position: absolute;
+  width: fit-content;
+  top: 30%;
+  border: 1px solid whitesmoke;
+  padding: 30px;
+  background-color: rgb(161, 219, 219);
+  display: flex;
+}
+
+.keyboard {
+  display: flex;
+}
+
+.press {
+  background-color:rgb(230, 178, 195);
+  box-shadow: -1px 1px 1px rgb(201, 223, 255);
+}
+
+.key {
+  height: 100px;
+  /* display: inline-block; */
+  float: left;
+}
+
