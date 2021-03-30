@@ -29,6 +29,14 @@ class App extends React.Component {
     })
   }
 
+  changeWaveForm(waveform) {
+    let wave = this.state.options;
+    wave.oscillator.type = waveform;
+    this.setState({
+      options: wave
+    })
+  }
+
   render() {
     return (
       <Keyboard  octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />
