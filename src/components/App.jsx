@@ -9,7 +9,7 @@ class App extends React.Component {
     this.state = {
       options: {
           oscillator : {
-            type : 'triangle'
+            type : 'sawtooth'
           },
           envelope : {
             attack : 0.002,
@@ -18,15 +18,20 @@ class App extends React.Component {
             release : .6
           }
         },
-      now: Tone.now(),
       octave: 3,
       poly: false
     }
   }
 
+  changeOctave(selected) {
+    this.setState({
+      octave: selected.value
+    })
+  }
+
   render() {
     return (
-      <Keyboard octave={this.state.octave} options={this.state.options} />
+      <Keyboard  octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />
     )
   }
 }

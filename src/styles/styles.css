@@ -3,11 +3,13 @@ body {
   display: flex;
   justify-content: center;
   align-content: center;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 #app {
   position: absolute;
-  width: fit-content;
+  width: 800px;
   top: 30%;
   border: 1px solid whitesmoke;
   padding: 30px;
@@ -19,14 +21,14 @@ body {
   display: flex;
 }
 
-.press {
-  background-color:rgb(230, 178, 195);
-  box-shadow: -1px 1px 1px rgb(201, 223, 255);
-}
 
 .key {
   height: 100px;
-  /* display: inline-block; */
-  float: left;
+  width:30px;
+  float: right;
+}
+
+.pressed {
+  background-color:rgb(247, 168, 139);
 }
 

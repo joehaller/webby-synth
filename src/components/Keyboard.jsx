@@ -1,11 +1,12 @@
 import React from 'react';
 import * as Tone from "tone";
 import Keys from './Keys.jsx';
+import OctaveSelect from './OctaveSelect.jsx';
 
 
 class Keyboard extends React.Component {
-  constructor(state) {
-    super(state);
+  constructor(props) {
+    super(props);
     this.state = {
       synth: null,
       now: Tone.now(),
@@ -24,6 +25,8 @@ class Keyboard extends React.Component {
     document.addEventListener('keydown', this.playNote);
     document.addEventListener('keyup', this.stopNote);
   }
+
+
 
 
   playNote(e) {
@@ -82,9 +85,20 @@ class Keyboard extends React.Component {
   render() {
     return(
       <div className="keyboard">
-        {this.state.notes.map((notes, i) => {
-          return (<Keys stop={this.stopNote} key={i} play={this.playNote} note={notes} />)
-        })}
+        <div>
+          <span>octave</span>
+          <OctaveSelect change={this.props.octaveChange}/>
+
+        </div>
+        <React.Fragment>
+          {this.state.notes.map((notes, i) => {
+            if (notes[i] === '#') {
+              return (<Keys sharp={true} stop={this.stopNote} key={i} play={this.playNote} note={notes} />)
+            }
+            return (<Keys sharp={false} stop={this.stopNote} key={i} play={this.playNote} note={notes} />)
+          })}
+        </React.Fragment>
+
       </div>
     )
   }
