@@ -27,7 +27,19 @@ class Keyboard extends React.Component {
         'u': false,
         'j': false,
         'k': false
-      }
+      },
+      options: {
+        oscillator : {
+          type : 'sine'
+        },
+        envelope : {
+          attack : 0.002,
+          decay : 0.1,
+          sustain : 0.5,
+          release : .6
+        }
+      },
+      waveChange: false
     }
     this.playNote = this.playNote.bind(this);
     this.stopNote = this.stopNote.bind(this);
@@ -36,10 +48,19 @@ class Keyboard extends React.Component {
 
   componentDidMount() {
     this.setState({
-      synth: new Tone.Synth(this.props.options).toDestination()
+      synth: new Tone.Synth(this.state.options).toDestination()
     })
     document.addEventListener('keydown', this.playNote);
     document.addEventListener('keyup', this.stopNote);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.waveChange !== prevState.waveChange) {
+      this.setState({
+        synth: new Tone.Synth(this.state.options).toDestination(),
+        waveChange: false
+      })
+    }
   }
 
   handlePress(key) {
@@ -47,6 +68,17 @@ class Keyboard extends React.Component {
     press[key] = !press[key];
     this.setState({
       pressed: press
+    })
+  }
+
+  changeWaveForm(waveform) {
+    console.log(waveform.value);
+    let wave = this.state.options;
+    wave['oscillator']['type'] = waveform.value;
+    console.log(wave);
+    this.setState({
+      options: wave,
+      waveChange: true
     })
   }
 
@@ -115,7 +147,7 @@ class Keyboard extends React.Component {
         </div>
         <div>
           <span>waveform</span>
-          <WaveSelect change={this.props.waveChange}/>
+          <WaveSelect change={this.changeWaveForm.bind(this)}/>
         </div>
         <div className="key-wrapper">
           <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
