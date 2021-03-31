@@ -8,17 +8,16 @@ body {
 }
 
 #app {
-  position: absolute;
+ justify-content: center;
+}
+
+.keysContainer {
   width: 800px;
-  top: 30%;
+  margin-top: 20%;
   border: 1px solid whitesmoke;
   padding: 30px;
   background-color: rgb(161, 219, 219);
-  display: flex;
-}
-
-.keyboard {
-  display: flex;
+  height: fit-content;
 }
 
 
@@ -28,7 +27,37 @@ body {
   float: right;
 }
 
+.keyboard {
+  height: inherit;
+  display: flex;
+}
+
 .pressed {
   background-color:rgb(247, 168, 139);
+}
+
+.attack {
+  margin-right: 20px;
+}
+
+.sustain {
+  margin-left: 20px;
+}
+
+.soundz {
+  border: 1px solid rgb(161, 219, 219);
+  width: 200px;
+  height: 225px;
+  overflow: scroll;
+  background-color: whitesmoke;
+}
+
+.sound {
+  border-bottom: 1px solid grey;
+}
+
+.sound:hover {
+  cursor: pointer;
+  color:rgb(128, 163, 197);
 }
 

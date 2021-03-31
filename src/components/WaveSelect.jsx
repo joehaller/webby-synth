@@ -49,6 +49,7 @@ class WaveSelect extends React.Component {
         value={selected}
         onChange={this.handleChange.bind(this)}
         options={options}
+        styles={{width: "100px"}}
       />
     )
   }

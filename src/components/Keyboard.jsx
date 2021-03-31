@@ -3,6 +3,7 @@ import * as Tone from "tone";
 import Keys from './Keys.jsx';
 import OctaveSelect from './OctaveSelect.jsx';
 import WaveSelect from './WaveSelect.jsx';
+import DialKnob from './DialKnob.jsx';
 
 
 class Keyboard extends React.Component {
@@ -33,13 +34,12 @@ class Keyboard extends React.Component {
           type : 'sine'
         },
         envelope : {
-          attack : 0.002,
+          attack : 0.01,
           decay : 0.1,
           sustain : 0.5,
           release : .6
         }
-      },
-      waveChange: false
+      }
     }
     this.playNote = this.playNote.bind(this);
     this.stopNote = this.stopNote.bind(this);
@@ -61,6 +61,14 @@ class Keyboard extends React.Component {
         waveChange: false
       })
     }
+    // } else if (this.state.envChange !== prevState.envChange) {
+    //   this.setState({
+    //     synth: new Tone.Synth(this.state.options).toDestination(),
+    //     envChange: false
+    //   })
+    // }
+    // document.addEventListener('keydown', this.playNote);
+    // document.addEventListener('keyup', this.stopNote);
   }
 
   handlePress(key) {
@@ -72,14 +80,46 @@ class Keyboard extends React.Component {
   }
 
   changeWaveForm(waveform) {
-    console.log(waveform.value);
     let wave = this.state.options;
     wave['oscillator']['type'] = waveform.value;
-    console.log(wave);
     this.setState({
       options: wave,
       waveChange: true
     })
+  }
+
+  changeAttack(val) {
+    if (val * 0.01 === this.state.options['envelope']['attack']) {
+      return;
+    }
+    let attack = this.state.options;
+    attack['envelope']['attack'] = val * 0.01;
+    this.setState({
+      options: attack,
+      synth: new Tone.Synth(attack).toDestination()
+    })
+  }
+
+  changeDecay(val) {
+    if (val * 0.1 !== this.state.options['envelope']['decay']) {
+      let decay = this.state.options;
+      decay['envelope']['decay'] = val * 0.1;
+      this.setState({
+        options: decay,
+        synth: new Tone.Synth(decay).toDestination()
+      })
+    }
+  }
+
+  changeSustain(val) {
+    if (val * 0.01 !== this.state.options['envelope']['sustain']) {
+      let sustain = this.state.options;
+      sustain['envelope']['sustain'] = val * 0.01;
+      this.setState({
+        options: sustain,
+        synth: new Tone.Synth(sustain).toDestination()
+      })
+    }
   }
 
 
@@ -148,6 +188,15 @@ class Keyboard extends React.Component {
         <div>
           <span>waveform</span>
           <WaveSelect change={this.changeWaveForm.bind(this)}/>
+        </div>
+        <div className="attack">
+          <DialKnob knob={'attack'} start={1} max={100} change={this.changeAttack.bind(this)} />
+        </div>
+        <div className="decay">
+          <DialKnob knob={'decay'} start={1} max={100} change={this.changeDecay.bind(this)} />
+        </div>
+        <div className="sustain">
+          <DialKnob knob={'sustain'} start={5} max={100} change={this.changeSustain.bind(this)} />
         </div>
         <div className="key-wrapper">
           <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
