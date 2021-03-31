@@ -2,6 +2,7 @@ import React from 'react';
 import * as Tone from "tone";
 import Keys from './Keys.jsx';
 import OctaveSelect from './OctaveSelect.jsx';
+import WaveSelect from './WaveSelect.jsx';
 
 
 class Keyboard extends React.Component {
@@ -111,6 +112,10 @@ class Keyboard extends React.Component {
         <div>
           <span>octave</span>
           <OctaveSelect change={this.props.octaveChange}/>
+        </div>
+        <div>
+          <span>waveform</span>
+          <WaveSelect change={this.props.waveChange}/>
         </div>
         <div className="key-wrapper">
           <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>

@@ -9,7 +9,7 @@ class App extends React.Component {
     this.state = {
       options: {
           oscillator : {
-            type : 'sawtooth'
+            type : 'sine'
           },
           envelope : {
             attack : 0.002,
@@ -28,10 +28,12 @@ class App extends React.Component {
       octave: selected.value
     })
   }
-
+  //WHAT'S GOING ON HERE????
   changeWaveForm(waveform) {
+    console.log(waveform.value);
     let wave = this.state.options;
-    wave.oscillator.type = waveform;
+    wave['oscillator']['type'] = waveform.value;
+    console.log(wave);
     this.setState({
       options: wave
     })
@@ -39,7 +41,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Keyboard  octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />
+      <Keyboard waveChange={this.changeWaveForm.bind(this)} octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />
     )
   }
 }
