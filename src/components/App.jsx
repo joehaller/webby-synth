@@ -2,6 +2,7 @@ import React from 'react';
 import * as Tone from "tone";
 import Keyboard from './Keyboard.jsx';
 import axios from 'axios';
+import Sampler from './Sampler.jsx';
 
 
 class App extends React.Component {
@@ -108,6 +109,9 @@ class App extends React.Component {
         <div className="sampler">
           <button onClick={this.playSample}>play</button>
           <button onClick={this.stopSample}>stop</button>
+        </div>
+        <div>
+          <Sampler />
         </div>
         <div className="keysContainer">
           <Keyboard octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />

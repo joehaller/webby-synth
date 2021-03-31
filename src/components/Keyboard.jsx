@@ -61,14 +61,6 @@ class Keyboard extends React.Component {
         waveChange: false
       })
     }
-    // } else if (this.state.envChange !== prevState.envChange) {
-    //   this.setState({
-    //     synth: new Tone.Synth(this.state.options).toDestination(),
-    //     envChange: false
-    //   })
-    // }
-    // document.addEventListener('keydown', this.playNote);
-    // document.addEventListener('keyup', this.stopNote);
   }
 
   handlePress(key) {
@@ -196,7 +188,7 @@ class Keyboard extends React.Component {
           <DialKnob knob={'decay'} start={1} max={100} change={this.changeDecay.bind(this)} />
         </div>
         <div className="sustain">
-          <DialKnob knob={'sustain'} start={5} max={100} change={this.changeSustain.bind(this)} />
+          <DialKnob knob={'sustain'} start={15} max={100} change={this.changeSustain.bind(this)} />
         </div>
         <div className="key-wrapper">
           <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
