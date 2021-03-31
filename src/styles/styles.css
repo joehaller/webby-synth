@@ -5,6 +5,7 @@ body {
   align-content: center;
   margin-left: 15%;
   margin-right: 15%;
+  font-family:'Helvetica Neue', sans-serif;
 }
 
 #app {
@@ -18,8 +19,27 @@ body {
   padding: 30px;
   background-color: rgb(161, 219, 219);
   height: fit-content;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
+.top {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.finder {
+  grid-column: 1;
+  margin-top: 10px;
+}
+
+.soundLabel {
+  grid-column: 1;
+}
+
+.soundz {
+  grid-column: 1;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
 
 .key {
   height: 100px;

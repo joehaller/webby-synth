@@ -13,7 +13,7 @@ class App extends React.Component {
       poly: false,
       searchText: '',
       soundLib: [],
-      sample: "https://freesound.org/data/previews/110/110011_1537422-hq.mp3",
+      sample: "https://freesound.org/data/previews/524/524528_11630708-lq.mp3",
       currentSound: null,
       sampler: null,
       now: Tone.now()
@@ -90,31 +90,32 @@ class App extends React.Component {
   render() {
     return (
       <div className="main">
-        <div>find soundz
+        <div className="top">
+          <div className="finder">find soundz
+            <br></br>
+            <form onSubmit={this.handleSubmit}>
+              <input onChange={this.handleSearchText} value={this.state.searchText} type='text' placeholder="search for a sound" />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+          <div className="soundLabel">soundz</div>
+          <div className="soundz">
+          {this.state.soundLib.map((sound, i) => {
+            return <div onClick={() => this.handleSoundClick(sound.id)} className="sound" key={i}>{sound.name}</div>
+          })}
+          </div>
           <br></br>
-          <form onSubmit={this.handleSubmit}>
-            <input onChange={this.handleSearchText} value={this.state.searchText} type='text' placeholder="search for a sound" />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-        <div>soundz</div>
-        <div className="soundz">
-         {this.state.soundLib.map((sound, i) => {
-           return <div onClick={() => this.handleSoundClick(sound.id)} className="sound" key={i}>{sound.name}</div>
-         })}
-        </div>
-        <div>samples
-          <div>{this.state.currentSound ? this.state.currentSound : 'meow'}</div>
-        </div>
-        <div className="sampler">
-          <button onClick={this.playSample}>play</button>
-          <button onClick={this.stopSample}>stop</button>
-        </div>
-        <div>
-          <Sampler />
+          <div>
+            <div>current sound: {this.state.currentSound ? this.state.currentSound : "Piano113.mp3"}</div>
+          </div>
+          <br></br>
+          <div className="playSounds">
+            <button onClick={this.playSample}>play</button>
+            <button onClick={this.stopSample}>stop</button>
+          </div>
         </div>
         <div className="keysContainer">
-          <Keyboard octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />
+          <Keyboard currSample={this.state.sample} octaveChange={this.changeOctave.bind(this)} octave={this.state.octave} options={this.state.options} />
         </div>
       </div>
     )

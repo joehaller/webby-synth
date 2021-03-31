@@ -4,6 +4,7 @@ import Keys from './Keys.jsx';
 import OctaveSelect from './OctaveSelect.jsx';
 import WaveSelect from './WaveSelect.jsx';
 import DialKnob from './DialKnob.jsx';
+import Sampler from './Sampler.jsx';
 
 
 class Keyboard extends React.Component {
@@ -189,6 +190,9 @@ class Keyboard extends React.Component {
         </div>
         <div className="sustain">
           <DialKnob knob={'sustain'} start={15} max={100} change={this.changeSustain.bind(this)} />
+        </div>
+        <div>
+          <Sampler currSample={this.props.currSample} />
         </div>
         <div className="key-wrapper">
           <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
