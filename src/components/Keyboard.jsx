@@ -40,7 +40,8 @@ class Keyboard extends React.Component {
           sustain : 0.5,
           release : .6
         }
-      }
+      },
+      on: false
     }
     this.playNote = this.playNote.bind(this);
     this.stopNote = this.stopNote.bind(this);
@@ -50,7 +51,7 @@ class Keyboard extends React.Component {
   componentDidMount() {
     this.setState({
       synth: new Tone.Synth(this.state.options).toDestination()
-    })
+    }, () =>  this.state.synth.disconnect())
     document.addEventListener('keydown', this.playNote);
     document.addEventListener('keyup', this.stopNote);
   }
@@ -64,9 +65,9 @@ class Keyboard extends React.Component {
     }
   }
 
-  handlePress(key) {
+  handlePress(key, bool) {
     let press = this.state.pressed;
-    press[key] = !press[key];
+    press[key] = bool;
     this.setState({
       pressed: press
     })
@@ -115,10 +116,33 @@ class Keyboard extends React.Component {
     }
   }
 
+  changeRelease(val) {
+    if (val * 0.01 !== this.state.options['envelope']['release']) {
+      let release = this.state.options;
+      release['envelope']['release'] = val * 0.01;
+      this.setState({
+        options: release,
+        synth: new Tone.Synth(release).toDestination()
+      })
+    }
+  }
+
+  onSwitch() {
+    if (!this.state.on) {
+      this.setState({
+        on: true
+      }, () => this.state.synth.disconnect())
+    } else {
+      this.setState({
+        on: false
+      }, () => this.state.synth.toDestination())
+    }
+  }
+
 
   playNote(e) {
     let oct = this.props.octave;
-    this.handlePress(e.key);
+    this.handlePress(e.key, true);
     switch (e.key) {
       case "a":
         return this.state.synth.triggerAttack(`C${oct}` , this.state.now);
@@ -166,7 +190,7 @@ class Keyboard extends React.Component {
       case "u":
       case "j":
       case "k":
-        this.handlePress(e.key)
+        this.handlePress(e.key, false)
         this.state.synth.triggerRelease();
     }
   }
@@ -175,63 +199,81 @@ class Keyboard extends React.Component {
     return(
       <div className="keyboard">
         <div>
-          <span>octave</span>
-          <OctaveSelect change={this.props.octaveChange}/>
+          <button onClick={this.onSwitch.bind(this)}>{!this.state.on ? "turn off" : "turn on"}</button>
         </div>
-        <div>
-          <span>waveform</span>
-          <WaveSelect change={this.changeWaveForm.bind(this)}/>
+        <div className="controls">
+          <div className="selectors">
+            <div className="octave">
+              <span>octave</span>
+              <OctaveSelect change={this.props.octaveChange}/>
+            </div>
+            <div className="wave">
+              <span>waveform</span>
+              <WaveSelect change={this.changeWaveForm.bind(this)}/>
+            </div>
+          </div>
+          <div className="knobCont">
+            <div className="knobs">
+              <div className="attack">
+                <DialKnob knob={'attack'} start={1} max={1000} change={this.changeAttack.bind(this)} />
+              </div>
+              <div className="decay">
+                <DialKnob knob={'decay'} start={1} max={1000} change={this.changeDecay.bind(this)} />
+              </div>
+              <div className="sustain">
+                <DialKnob knob={'sustain'} start={15} max={100} change={this.changeSustain.bind(this)} />
+              </div>
+              <div className="release">
+                <DialKnob knob={'release'} start={6} max={10000} change={this.changeRelease.bind(this)} />
+              </div>
+            </div>
+          </div>
+          <div>
+            <Sampler currSample={this.props.currSample} />
+          </div>
         </div>
-        <div className="attack">
-          <DialKnob knob={'attack'} start={1} max={100} change={this.changeAttack.bind(this)} />
-        </div>
-        <div className="decay">
-          <DialKnob knob={'decay'} start={1} max={100} change={this.changeDecay.bind(this)} />
-        </div>
-        <div className="sustain">
-          <DialKnob knob={'sustain'} start={15} max={100} change={this.changeSustain.bind(this)} />
-        </div>
-        <div>
-          <Sampler currSample={this.props.currSample} />
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['w'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C#</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['s'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>D</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['e'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>D#</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['d'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>E</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['f'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>F</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['t'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>F#</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['g'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>G</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['y'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>G#</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['h'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>A</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['u'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>A#</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['j'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>B</button>
-        </div>
-        <div className="key-wrapper">
-          <button className={this.state.pressed['k'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
+        <div className="keyCont">
+          <div className="actualKeys">
+            <div className="key-wrapper">
+              <button className={this.state.pressed['a'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['w'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C#</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['s'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>D</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['e'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>D#</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['d'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>E</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['f'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>F</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['t'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>F#</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['g'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>G</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['y'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>G#</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['h'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>A</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['u'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>A#</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['j'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>B</button>
+            </div>
+            <div className="key-wrapper">
+              <button className={this.state.pressed['k'] ? "key pressed" : "key"} onKeyUp={this.playNote} onKeyDown={this.stopNote}>C</button>
+            </div>
+          </div>
         </div>
       </div>
     )

@@ -11,10 +11,21 @@ class Sampler extends React.Component {
     super(props);
     this.state = {
       sampler: this.props.currSample,
-      now: Tone.now()
+      now: Tone.now(),
+      pressed: {
+        '1': false,
+        '2': false,
+        '3': false,
+        '4': false,
+        '5': false,
+        '6': false,
+        '7': false,
+        '8': false
+      }
     }
     this.playSound = this.playSound.bind(this);
     this.stopSound = this.stopSound.bind(this);
+    this.handlePress = this.handlePress.bind(this);
   }
 
   componentDidMount() {
@@ -42,7 +53,7 @@ class Sampler extends React.Component {
 
 
   playSound(e) {
-    console.log(e.key)
+    this.handlePress(e.key);
     if (this.state.sampler.loaded) {
       switch (e.key) {
         case "1":
@@ -76,25 +87,34 @@ class Sampler extends React.Component {
       case "6":
       case "7":
       case "8":
-        // this.handlePress(e.key)
-        this.state.sampler.triggerRelease(this.state.now);
+        this.handlePress(e.key)
+        return this.state.sampler.triggerRelease();
       default:
         return;
     }
+  }
+
+  handlePress(key) {
+    key = key.toString();
+    let press = this.state.pressed;
+    press[key] = !press[key];
+    this.setState({
+      pressed: press
+    })
   }
 
 
   render() {
     return(
       <div className="samplerCont">
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>C</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>D</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>E</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>F</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>G</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>A</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>B</button>
-        <button onKeyUp={this.playSound} onKeyDown={this.stopSound}>C</button>
+        <button className={this.state.pressed['1'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>C</button>
+        <button className={this.state.pressed['2'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>D</button>
+        <button className={this.state.pressed['3'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>E</button>
+        <button className={this.state.pressed['4'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>F</button>
+        <button className={this.state.pressed['5'] ? "pad pressed" : "pad"}  onKeyUp={this.playSound} onKeyDown={this.stopSound}>G</button>
+        <button className={this.state.pressed['6'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>A</button>
+        <button className={this.state.pressed['7'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>B</button>
+        <button className={this.state.pressed['8'] ? "pad pressed" : "pad"} onKeyUp={this.playSound} onKeyDown={this.stopSound}>C</button>
       </div>
     )
   }

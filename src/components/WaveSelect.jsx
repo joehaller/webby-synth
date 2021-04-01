@@ -8,7 +8,7 @@ const colourStyles = {
     return {
       ...styles,
       backgroundColor: isDisabled ? 'red' : 'blue',
-      color: '#FFF',
+      color: 'grey',
       cursor: isDisabled ? 'not-allowed' : 'default',
 
     };
@@ -49,7 +49,6 @@ class WaveSelect extends React.Component {
         value={selected}
         onChange={this.handleChange.bind(this)}
         options={options}
-        styles={{width: "100px"}}
       />
     )
   }

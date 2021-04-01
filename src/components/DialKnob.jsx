@@ -21,7 +21,8 @@ const DialKnob = (props) => {
         style={{
           position: 'relative',
           margin: '100px auto',
-          width: '30px'
+          width: '30px',
+          bottom: '110%'
         }}
         onValueChange={setValue}
         ariaLabelledBy={'knob'}

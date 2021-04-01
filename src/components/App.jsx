@@ -16,7 +16,8 @@ class App extends React.Component {
       sample: "https://freesound.org/data/previews/524/524528_11630708-lq.mp3",
       currentSound: null,
       sampler: null,
-      now: Tone.now()
+      now: Tone.now(),
+      favs: []
     }
     this.handleSearchText = this.handleSearchText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,21 +92,21 @@ class App extends React.Component {
     return (
       <div className="main">
         <div className="top">
-          <div className="finder">find soundz
-            <br></br>
+          <div className="finderLabel">find sounds</div>
+          <div className="finder">
             <form onSubmit={this.handleSubmit}>
-              <input onChange={this.handleSearchText} value={this.state.searchText} type='text' placeholder="search for a sound" />
+              <input onChange={this.handleSearchText} value={this.state.searchText} className="input" type='text' placeholder="search for a sound" />
               <input type="submit" value="Submit" />
             </form>
           </div>
-          <div className="soundLabel">soundz</div>
+          <div className="soundLabel">sounds</div>
           <div className="soundz">
           {this.state.soundLib.map((sound, i) => {
             return <div onClick={() => this.handleSoundClick(sound.id)} className="sound" key={i}>{sound.name}</div>
           })}
           </div>
           <br></br>
-          <div>
+          <div className="currSound">
             <div>current sound: {this.state.currentSound ? this.state.currentSound : "Piano113.mp3"}</div>
           </div>
           <br></br>
